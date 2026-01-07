@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>7ob 7ayaty</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+direction:rtl;
+font-family:Tahoma,Arial;
+background:radial-gradient(circle at top,#ffd1e8,#ff5b99);
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+position:relative;
+}
+
+/* القلوب */
+.heart{
+position:fixed;
+background-color:rgba(255,105,180,.8);
+transform:rotate(45deg);
+animation:float 8s linear infinite;
+pointer-events:none;
+z-index:0;
+opacity:0;
+filter:drop-shadow(0 0 6px rgba(255,105,180,.7));
+}
+.heart:before,.heart:after{
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+background-color:inherit;
+border-radius:50%;
+}
+.heart:before{top:-50%}
+.heart:after{left:-50%}
+
+@keyframes float{
+0%{transform:translateY(0) scale(.7) rotate(45deg);opacity:0}
+10%{opacity:.9}
+100%{transform:translateY(-110vh) scale(1.1) rotate(45deg);opacity:0}
+}
+
+.overlay{
+width:100%;
+max-width:1000px;
+height:100vh;
+background:rgba(255,245,250,.96);
+padding:16px;
+display:flex;
+flex-direction:column;
+border-radius:18px;
+box-shadow:0 18px 40px rgba(160,0,70,.45);
+z-index:1;
+}
+
+h1{text-align:center;color:#c3004f;margin-bottom:6px}
+h2{text-align:center;color:#7a0036;font-size:.9rem;margin-bottom:16px}
+
+#login-page{
+flex:1;
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+
+input{
+width:100%;
+padding:12px;
+border-radius:999px;
+border:1px solid #ff8fba;
+margin-bottom:14px;
+background:#fff5fa;
+}
+
+.btn{
+width:100%;
+padding:12px;
+border-radius:999px;
+border:none;
+background:linear-gradient(135deg,#ff4f8f,#ff2b6f);
+color:#fff;
+cursor:pointer;
+}
+
+.error{text-align:center;color:#c00036;font-size:.85rem}
+
+/* مهم للسكرول */
+#inner-page{
+display:none;
+flex:1;
+flex-direction:column;
+min-height:0;
+}
+
+.frames-scroll{
+flex:1;
+overflow-y:auto;
+padding-bottom:20px;
+}
+
+.frame{
+background:linear-gradient(145deg,#ffe3f1,#ffd1ea);
+border-radius:16px;
+padding:10px;
+margin-bottom:14px;
+}
+
+.photo{
+width:100%;
+aspect-ratio:4/3;
+border-radius:12px;
+overflow:hidden;
+background:#fff0f8;
+}
+
+.photo img,
+.photo video{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.caption{
+margin-top:8px;
+padding:8px;
+border-radius:10px;
+border:1px dashed #c7005c;
+background:#fff;
+font-size:.85rem;
+line-height:1.6;
+}
+
+.final-text{
+margin-top:10px;
+padding:10px;
+border-radius:14px;
+background:#fff;
+text-align:center;
+line-height:1.7;
+}
+
+footer{text-align:center;font-size:.75rem;color:#7a0036}
+</style>
+</head>
+
+<body>
+
+<audio id="music" loop preload="auto">
+  <source src="waelgassar.mp3" type="audio/mpeg">
+  <source src="waelgassar.wav" type="audio/wav">
+  <source src="waelgassar.ogg" type="audio/ogg">
+</audio>
+
+<div class="overlay">
+
+<section id="login-page">
+<h1>أهلاً يا حب حياتي</h1>
+<h2>ادخلي رمزنا السري ❤️</h2>
+<input id="user" placeholder="اسم المستخدم">
+<input id="pass" type="password" placeholder="كلمة المرور">
+<button class="btn" id="loginBtn">افتحي قلبي</button>
+<div class="error" id="err"></div>
+</section>
+
+<section id="inner-page">
+<h1>لحظاتنا الحلوة</h1>
+<div class="frames-scroll" id="frames"></div>
+
+<div class="final-text">
+كل دي لحظات عشناها سوا ❤️ ولسه اللي جاي أحلى وأجمل بإذن الله 💕
+</div>
+</section>
+
+<footer>تم التنفيذ بواسطة <b>Youssef Samir</b></footer>
+</div>
+
+<script>
+/* القلوب */
+for(let i=0;i<40;i++){
+  const h=document.createElement("div");
+  h.className="heart";
+  const s=12+Math.random()*20;
+  h.style.width=s+"px";
+  h.style.height=s+"px";
+  h.style.left=Math.random()*100+"vw";
+  h.style.bottom="-40px";
+  h.style.animationDuration=(6+Math.random()*6)+"s";
+  document.body.appendChild(h);
+}
+
+/* عناصر الصفحة */
+const loginBtn = document.getElementById("loginBtn");
+const user     = document.getElementById("user");
+const pass     = document.getElementById("pass");
+const err      = document.getElementById("err");
+const music    = document.getElementById("music");
+const frames   = document.getElementById("frames");
+
+/* النصوص */
+const romanticTexts=[
+"كل صورة من دول حكاية صغيرة من حكاياتنا ❤️",
+"ضحكتك في اللحظة دي كانت الدنيا كلها 💕",
+"ربنا رزقني بيكي نعمة كبيرة 💖",
+"انتي الحياة اللي كنت بدوّر عليها ❤️",
+"الدنيا وقفت هنا علشانك 💞",
+"ملامحك أمان وراحة 💗",
+"كل ثانية معاك ذكرى ❤️",
+"حب عمري كله 💕",
+"الضحكة دي حقيقية 💖",
+"وجودك خلّى كل حاجة أحلى ❤️",
+"القلب مشافش غيرك 💞",
+"أحلامي كلها في الصورة دي 💗",
+"أجمل نصيب ❤️",
+"وعد من قلبي 💕",
+"أنا مبسوط بيكي 💖",
+"سبب سعادتي ❤️",
+"حب مالوش آخر 💞",
+"تفاصيلك كلها حلوة 💗",
+"لحظة فيديو من أجمل لحظاتنا ❤️",
+"لحظة فيديو تانية هتفضل في القلب 💕"
+];
+
+/* الميديا */
+const media=[
+"photo_2026-01-07_00-22-08.jpg",
+"photo_2026-01-07_00-22-36.jpg",
+"photo_2026-01-07_00-23-04.jpg",
+"photo_2026-01-07_00-23-15.jpg",
+"photo_2026-01-07_00-23-29.jpg",
+"photo_2026-01-07_00-23-33 - Copy.jpg",
+"photo_2026-01-07_00-23-37.jpg",
+"photo_2026-01-07_00-23-43.jpg",
+"photo_2026-01-07_00-24-17.jpg",
+"photo_2026-01-07_00-24-20.jpg",
+"photo_2026-01-07_00-24-25.jpg",
+"photo_2026-01-07_00-24-29.jpg",
+"photo_2026-01-07_00-24-33.jpg",
+"photo_2026-01-07_00-24-36.jpg",
+"photo_2026-01-07_00-24-39.jpg",
+"photo_2026-01-07_00-24-45.jpg",
+"photo_2026-01-07_00-24-48.jpg",
+"photo_2026-01-07_00-22-08 - Copy.jpg",
+"doc_2026-01-07_00-22-01.mp4",
+"doc_2026-01-07_00-22-28.mp4"
+];
+
+/* إنشاء القوالب */
+for(let i=0;i<20;i++){
+  const isVideo = media[i].endsWith(".mp4");
+  frames.innerHTML += `
+    <div class="frame">
+      <div class="photo">
+        ${isVideo
+          ? `<video src="${media[i]}" controls></video>`
+          : `<img src="${media[i]}">`}
+      </div>
+      <div class="caption">${romanticTexts[i]}</div>
+    </div>`;
+}
+
+/* تسجيل الدخول + تشغيل الصوت */
+loginBtn.onclick = () => {
+  if(user.value==="benty" && pass.value==="8/10/2025"){
+    document.getElementById("login-page").style.display="none";
+    document.getElementById("inner-page").style.display="flex";
+    music.currentTime = 0;
+    music.play().catch(()=>{});
+  }else{
+    err.textContent="الكود غلط يا روحي ❤️";
+  }
+};
+</script>
+
+</body>
+</html>
+
